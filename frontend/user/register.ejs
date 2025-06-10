@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Student</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #001f3f;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #002147;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fcd307;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border: 2px solid #fcd307;
+        }
+
+        button {
+            background-color: #fcd307;
+            color: #002147;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #ffe600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h2>Student Registration</h2>
+        <form id="registerForm">
+            <input type="text" name="full_name" placeholder="Full Name" required />
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="text" name="program" placeholder="Program" required />
+            <input type="number" name="year" placeholder="Year (e.g. 2025)" required />
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <script>
+        const registerForm = document.getElementById("registerForm");
+
+        registerForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                full_name: registerForm.full_name.value,
+                email: registerForm.email.value,
+                program: registerForm.program.value,
+                year: registerForm.year.value,
+            };
+
+            try {
+                const res = await fetch("/api/student/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert(`✅ Registration successful!\nYour Student ID: ${data.studentId}`);
+                    window.location.href = "/home"; // ✅ Redirect to home.ejs
+                } else {
+                    alert("❌ " + data.message);
+                }
+            } catch (err) {
+                alert("❌ An error occurred during registration.");
+                console.error(err);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #001f3f;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fcd307;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #002147;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #444;
+            text-align: center;
+        }
+
+        th {
+            background-color: #fcd307;
+            color: #002147;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-update {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-logout {
+            float: right;
+            background-color: #fcd307;
+            color: #001f3f;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-logout:hover {
+            background-color: #ffe600;
+        }
+
+        .update-form {
+            display: none;
+            margin-top: 10px;
+            background: #001c36;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .update-form select,
+        .update-form input {
+            margin: 5px;
+            padding: 5px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/logout" class="btn-logout">Logout</a>
+    <h1>Registered Students</h1>
+
+    <% if (students.length===0) { %>
+        <p>No students registered yet.</p>
+        <% } else { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Program</th>
+                        <th>Year</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% students.forEach(student=> { %>
+                        <tr>
+                            <td>
+                                <%= student.student_id %>
+                            </td>
+                            <td>
+                                <%= student.full_name %>
+                            </td>
+                            <td>
+                                <%= student.email %>
+                            </td>
+                            <td>
+                                <%= student.program %>
+                            </td>
+                            <td>
+                                <%= student.year %>
+                            </td>
+                            <td>
+                                <button class="btn btn-delete"
+                                    onclick="deleteStudent('<%= student.student_id %>')">Delete</button>
+                                <button class="btn btn-update"
+                                    onclick="toggleUpdateForm('<%= student.student_id %>')">Update</button>
+                            </td>
+                        </tr>
+                        <tr class="update-form-row" id="form-<%= student.student_id %>">
+                            <td colspan="6">
+                                <div class="update-form">
+                                    <form onsubmit="return updateStudent('<%= student.student_id %>', this)">
+                                        <label>Field:</label>
+                                        <select name="field" required>
+                                            <option value="">Select field</option>
+                                            <option value="full_name">Full Name</option>
+                                            <option value="email">Email</option>
+                                            <option value="program">Program</option>
+                                            <option value="year">Year</option>
+                                        </select>
+                                        <label>New Value:</label>
+                                        <input type="text" name="value" required />
+                                        <button type="submit" class="btn btn-update">Submit</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+            <% } %>
+
+                <script>
+                    function deleteStudent(studentId) {
+                        if (confirm("Are you sure to delete this student?")) {
+                            fetch(`/api/admin/students/${studentId}`, {
+                                method: 'DELETE'
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    alert(data.message);
+                                    location.reload();
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                    alert("❌ Failed to delete student");
+                                });
+                        }
+                    }
+
+                    function toggleUpdateForm(studentId) {
+                        const row = document.getElementById("form-" + studentId);
+                        const form = row.querySelector(".update-form");
+                        form.style.display = form.style.display === "block" ? "none" : "block";
+                    }
+
+                    function updateStudent(studentId, form) {
+                        const field = form.field.value;
+                        const value = form.value.value;
+
+                        if (!field || !value) {
+                            alert("Please fill out all fields.");
+                            return false;
+                        }
+
+                        fetch(`/api/admin/students/${studentId}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ field, value })
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                alert(data.message);
+                                location.reload();
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                alert("❌ Failed to update student.");
+                            });
+
+                        return false; // prevent default form submission
+                    }
+                </script>
+
+</body>
+
+</html>

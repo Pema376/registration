@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sherubtse Student Registration</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-image: url("/images/sherubtse.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            color: #f4d03f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .content {
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: #f4d03f;
+            color: #0b1d3a;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #ffeb3b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <div class="content">
+        <h1>Welcome to Sherubtse Student Registration System</h1>
+        <div class="btn-container">
+            <a class="btn" href="/signup">User</a>
+            <a class="btn" href="/admin/login">Admin</a>
+        </div>
+    </div>
+</body>
+
+</html>
