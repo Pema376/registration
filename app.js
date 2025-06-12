@@ -7,8 +7,10 @@ const app = express();
 const db = require("./db"); // ✅ Required to query students
 
 // Import table creation functions
-const createUserTable = require("/models/user.js");
-const createStudentTable = require("/models/student.js");
+// Import table creation functions
+const createUserTable = require(" ./models/user.js");
+const createStudentTable = require(" ./models/student.js");
+
 
 // Middleware
 app.use(cors());
