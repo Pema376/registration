@@ -8,8 +8,9 @@ const db = require("./db"); // ✅ Required to query students
 
 // Import table creation functions
 // Import table creation functions
-const createUserTable = require(" ./models/user.js");
-const createStudentTable = require(" ./models/student.js");
+const createUserTable = require("./frontend/models/user.js");
+const createStudentTable = require("./frontend/models/student.js");
+
 
 
 // Middleware
