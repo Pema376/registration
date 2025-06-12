@@ -6,12 +6,9 @@ const cors = require("cors");
 const app = express();
 const db = require("./db"); // ✅ Required to query students
 
-// Import table creation functions
-// Import table creation functions
+// ✅ Corrected relative paths to your models inside frontend/models/
 const createUserTable = require("./frontend/models/user.js");
 const createStudentTable = require("./frontend/models/student.js");
-
-
 
 // Middleware
 app.use(cors());
@@ -24,6 +21,7 @@ app.set("views", path.join(__dirname, "frontend"));
 
 // Static files (optional)
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "frontend/images")));
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
@@ -31,9 +29,8 @@ const adminRoutes = require("./routes/adminRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 
 app.use("/api", authRoutes); // User signup/login
-app.use("/api/admin", adminRoutes); // Admin login POST route
+app.use("/api/admin", adminRoutes); // Admin login
 app.use("/api/student", studentRoutes); // Student registration
-app.use('/images', express.static(path.join(__dirname, 'frontend/images')));
 
 // Page Rendering Routes
 app.get("/", (req, res) => {
@@ -61,11 +58,10 @@ app.get("/user/register", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  // Optional: destroy session or clear cookies if using sessions
-  res.redirect("/home"); // Redirect to home.ejs
+  res.redirect("/home");
 });
 
-// ✅ Dashboard route with student data
+// ✅ Admin dashboard route that shows all registered students
 app.get("/dashboard", async (req, res) => {
   try {
     const result = await db.query(
@@ -78,7 +74,7 @@ app.get("/dashboard", async (req, res) => {
   }
 });
 
-// Start server after creating tables
+// Start the server after creating tables
 const startServer = async () => {
   try {
     await createUserTable();
