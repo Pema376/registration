@@ -3,17 +3,16 @@ const pool = require("../config/db");
 const createStudentTable = async () => {
   const query = `
     CREATE TABLE IF NOT EXISTS students (
-      id SERIAL PRIMARY KEY,
-      name VARCHAR(100),
-      age INT,
-      email VARCHAR(100),
-      course VARCHAR(100),
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      student_id SERIAL PRIMARY KEY,
+      full_name VARCHAR(100) NOT NULL,
+      email VARCHAR(100) NOT NULL,
+      program VARCHAR(100),
+      year VARCHAR(50)
     );
   `;
   try {
     await pool.query(query);
-    console.log("✅ Student table created or already exists.");
+    console.log("✅ Correct 'students' table created or already exists.");
   } catch (err) {
     console.error("❌ Error creating student table:", err);
   }
