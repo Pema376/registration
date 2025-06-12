@@ -7,8 +7,8 @@ const app = express();
 const db = require("./db"); // ✅ Required to query students
 
 // ✅ Corrected relative paths to your models inside frontend/models/
-const createUserTable = require("./frontend/models/user.js");
-const createStudentTable = require("./frontend/models/student.js");
+const createUserTable = require("./registration/models/user.js");
+const createStudentTable = require("./registration/models/student.js");
 
 // Middleware
 app.use(cors());
