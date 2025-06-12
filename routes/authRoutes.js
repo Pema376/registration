@@ -4,6 +4,9 @@ const db = require("../db");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt"); // ✅ Add bcrypt for hashing
 const sendVerificationEmail = require("../utils/sendEmails");
+console.log("➡️ Incoming email:", email);
+console.log("📋 existing.rows:", existing.rows);
+
 
 // Signup with verification
 router.post("/signup", async (req, res) => {
