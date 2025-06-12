@@ -18,4 +18,5 @@ const createStudentTable = async () => {
   }
 };
 
-createStudentTable();
+// Export the function but DO NOT call here
+module.exports = createStudentTable;

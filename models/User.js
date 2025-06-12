@@ -4,19 +4,18 @@ const createUserTable = async () => {
   const query = `
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
-      full_name VARCHAR(100),
+      name VARCHAR(100),
       email VARCHAR(100) UNIQUE,
       password VARCHAR(255),
-      verified BOOLEAN DEFAULT false,
-      verification_token TEXT
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
   try {
     await pool.query(query);
-    console.log("✅ Correct 'users' table created or already exists.");
+    console.log("✅ User table created or already exists.");
   } catch (err) {
-    console.error("❌ Error creating users table:", err);
+    console.error("❌ Error creating user table:", err);
   }
 };
 
-createUserTable();
+module.exports = createUserTable;

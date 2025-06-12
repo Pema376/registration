@@ -3,10 +3,12 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 
-
 const app = express();
 const db = require("./db"); // ✅ Required to query students
 
+// Import table creation functions
+const createUserTable = require("/models/user.js");
+const createStudentTable = require("/models/student.js");
 
 // Middleware
 app.use(cors());
@@ -54,11 +56,11 @@ app.get("/admin/login", (req, res) => {
 app.get("/user/register", (req, res) => {
   res.render("user/register");
 });
+
 app.get("/logout", (req, res) => {
   // Optional: destroy session or clear cookies if using sessions
   res.redirect("/home"); // Redirect to home.ejs
 });
-
 
 // ✅ Dashboard route with student data
 app.get("/dashboard", async (req, res) => {
@@ -73,8 +75,20 @@ app.get("/dashboard", async (req, res) => {
   }
 });
 
-// Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Server is running at http://localhost:${PORT}`);
-});
+// Start server after creating tables
+const startServer = async () => {
+  try {
+    await createUserTable();
+    await createStudentTable();
+
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`✅ Server is running at http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Error during startup:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
