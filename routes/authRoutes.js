@@ -11,10 +11,9 @@ router.post("/signup", async (req, res) => {
   console.log("➡️ Incoming email:", email);
 
   try {
-    const existing = await db.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
-    console.log("📋 existing.rows:", existing.rows); // ✅ Moved here
+    const existing = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+console.log("📋 existing.rows:", existing.rows);
+
 
     if (existing.rows.length > 0)
       return res.status(400).json({ message: "Email already registered" });
