@@ -7,6 +7,8 @@ const createUserTable = async () => {
       full_name VARCHAR(100),
       email VARCHAR(100) UNIQUE,
       password VARCHAR(255),
+      verified BOOLEAN DEFAULT false,
+      verification_token VARCHAR(255),
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;

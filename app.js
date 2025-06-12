@@ -23,6 +23,23 @@ const addFullNameColumnIfMissing = async () => {
   }
 };
 
+// Helper to add verified and verification_token columns if missing
+const addVerificationColumnsIfMissing = async () => {
+  try {
+    await db.query(`
+      ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS verified BOOLEAN DEFAULT false;
+    `);
+    await db.query(`
+      ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255);
+    `);
+    console.log("✅ Checked and added 'verified' and 'verification_token' columns if missing.");
+  } catch (err) {
+    console.error("❌ Error adding verification columns:", err);
+  }
+};
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -91,7 +108,8 @@ app.get("/dashboard", async (req, res) => {
 const startServer = async () => {
   try {
     await createUserTable();
-    await addFullNameColumnIfMissing();  // << Added here
+    await addFullNameColumnIfMissing();  // << Your existing call
+    await addVerificationColumnsIfMissing();  // << NEW: add verified & token columns
     await createStudentTable();
 
     const PORT = process.env.PORT || 5000;
