@@ -105,7 +105,7 @@
             e.preventDefault();
 
             const formData = {
-                fullName: form.fullName.value,
+                full_name: form.fullName.value,  // updated key to match backend
                 email: form.email.value,
                 password: form.password.value
             };
@@ -123,7 +123,7 @@
 
                 if (res.ok) {
                     alert("✅ Signup successful! Redirecting to login...");
-                    window.location.href = "/login"; // ✅ redirect to login.ejs
+                    window.location.href = "/login";
                 } else {
                     alert("❌ " + data.message);
                 }
