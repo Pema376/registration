@@ -10,6 +10,19 @@ const db = require("./db"); // ✅ Required to query students
 const createUserTable = require("./models/User.js");
 const createStudentTable = require("./models/Student.js");
 
+// Helper to add full_name column if missing
+const addFullNameColumnIfMissing = async () => {
+  try {
+    await db.query(`
+      ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS full_name VARCHAR(100);
+    `);
+    console.log("✅ Checked and added 'full_name' column if missing.");
+  } catch (err) {
+    console.error("❌ Error adding full_name column:", err);
+  }
+};
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -78,6 +91,7 @@ app.get("/dashboard", async (req, res) => {
 const startServer = async () => {
   try {
     await createUserTable();
+    await addFullNameColumnIfMissing();  // << Added here
     await createStudentTable();
 
     const PORT = process.env.PORT || 5000;
